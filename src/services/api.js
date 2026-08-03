@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // baseURL: import.meta.env.VITE_API_URL || 'https://billingswt-backend-1xx.onrender.com/api',
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://billingswt-backend-1xx.onrender.com/api',
+  // baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api',
   headers: {
     'Content-Type': 'application/json',
   },
