@@ -60,21 +60,6 @@ const SplashScreen = () => {
           <span>{progress}%</span>
         </div>
       </div>
-
-      {/* Absolute Bottom Footer - Powered by Unotech */}
-      <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center animate-fade-in" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
-         <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400 mb-2">Powered By</span>
-         
-         <div className="flex items-center gap-2 opacity-90">
-           {/* Unotech Abstract Logo */}
-           <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-              <polyline points="2 17 12 22 22 17"></polyline>
-              <polyline points="2 12 12 17 22 12"></polyline>
-           </svg>
-           <span className="font-extrabold tracking-widest text-slate-900 text-sm">UNOTECH</span>
-         </div>
-      </div>
     </div>
   );
 };

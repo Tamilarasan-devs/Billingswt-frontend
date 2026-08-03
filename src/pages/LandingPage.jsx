@@ -97,19 +97,8 @@ const LandingPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-white border-t border-slate-200 py-8 px-6 flex flex-col items-center justify-center">
-         <div className="flex flex-col items-center">
-           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">Powered By</span>
-           <div className="flex items-center gap-2">
-             <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                <polyline points="2 17 12 22 22 17"></polyline>
-                <polyline points="2 12 12 17 22 12"></polyline>
-             </svg>
-             <span className="font-extrabold tracking-widest text-slate-900 text-sm">UNOTECH</span>
-           </div>
-         </div>
-         <p className="text-xs text-slate-400 mt-4">&copy; {new Date().getFullYear()} BillingApp by Unotech. All rights reserved.</p>
+      <footer className="w-full bg-white border-t border-slate-200 py-6 px-6 flex items-center justify-center">
+         <p className="text-xs font-medium text-slate-500">&copy; {new Date().getFullYear()} BillingPro SaaS Platform. All rights reserved.</p>
       </footer>
     </div>
   );

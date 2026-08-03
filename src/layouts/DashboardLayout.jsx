@@ -1,13 +1,35 @@
 import { Outlet } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import LicenseExpiredModal from '../components/LicenseExpiredModal';
 import { useAuth } from '../store/AuthContext';
+import { getBusinessProfile } from '../services/businessService';
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user } = useAuth();
+
+  useEffect(() => {
+    const updateTitleWithBusinessName = async () => {
+      try {
+        if (user?.role === 'SUPER_ADMIN') {
+          document.title = 'Super Admin - SaaS Control Center';
+          return;
+        }
+        const res = await getBusinessProfile();
+        if (res?.data?.businessProfile?.businessName) {
+          document.title = `${res.data.businessProfile.businessName} | Billing Software`;
+        } else {
+          document.title = 'Billing Software';
+        }
+      } catch (error) {
+        document.title = 'Billing Software';
+      }
+    };
+
+    updateTitleWithBusinessName();
+  }, [user]);
 
   // Check if normal user license is expired or revoked
   const isExpired = user && user.role !== 'SUPER_ADMIN' && (
