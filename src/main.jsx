@@ -10,6 +10,7 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       retry: false,
+      staleTime: 5 * 60 * 1000, // Keep data fresh for 5 minutes to eliminate loading spinners on page turns
     },
   },
 });

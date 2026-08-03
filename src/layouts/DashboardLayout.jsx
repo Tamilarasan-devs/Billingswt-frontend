@@ -2,12 +2,24 @@ import { Outlet } from 'react-router-dom';
 import { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
+import LicenseExpiredModal from '../components/LicenseExpiredModal';
+import { useAuth } from '../store/AuthContext';
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user } = useAuth();
+
+  // Check if normal user license is expired or revoked
+  const isExpired = user && user.role !== 'SUPER_ADMIN' && (
+    !user.license || 
+    user.license.status === 'EXPIRED' || 
+    user.license.status === 'DISABLED' || 
+    (user.license.expiresAt && new Date() > new Date(user.license.expiresAt))
+  );
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden print:h-auto print:bg-white print:overflow-visible relative">
+      <LicenseExpiredModal isOpen={isExpired} />
       <div className="print:hidden">
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       </div>

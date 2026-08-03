@@ -14,12 +14,16 @@ import Products from './pages/Products';
 import ProductForm from './pages/ProductForm';
 import Billing from './pages/Billing';
 import SalesHistory from './pages/SalesHistory';
+import BarcodeGenerator from './pages/BarcodeGenerator';
+import BusinessProfile from './pages/BusinessProfile';
+import LicenseManager from './pages/LicenseManager';
+import AdminUsers from './pages/AdminUsers';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (loading) return <SplashScreen />;
   if (!user) return <Navigate to="/login" replace />;
   
   return children;
@@ -39,9 +43,13 @@ function AppRoutes() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/new" element={<ProductForm />} />
         <Route path="/products/edit/:id" element={<ProductForm />} />
+        <Route path="/barcodes" element={<BarcodeGenerator />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/billing/new" element={<Billing />} /> {/* Both point to the POS */}
         <Route path="/sales" element={<SalesHistory />} />
+        <Route path="/profile" element={<BusinessProfile />} />
+        <Route path="/admin/licenses" element={<LicenseManager />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
       </Route>
       
       <Route path="*" element={<Navigate to="/" replace />} />
@@ -49,25 +57,34 @@ function AppRoutes() {
   );
 }
 
-function App() {
+function AppContent() {
+  const { loading: authLoading } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 2500); // Display splash screen for 2.5 seconds
+    }, 1000); // Display splash screen for 1 second while auth loads in parallel
 
     return () => clearTimeout(timer);
   }, []);
 
-  if (showSplash) {
+  if (showSplash || authLoading) {
     return <SplashScreen />;
   }
 
   return (
-    <AuthProvider>
+    <>
       <Toaster position="top-right" />
       <AppRoutes />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
     </AuthProvider>
   );
 }

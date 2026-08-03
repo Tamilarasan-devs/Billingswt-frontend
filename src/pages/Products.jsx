@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Search, Edit2, Trash2, Package, Grid, List, ArrowUpDown } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, Package, Grid, List, ArrowUpDown, Barcode as BarcodeIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getProducts, updateProduct, deleteProduct } from '../services/productService';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -110,13 +110,22 @@ const Products = () => {
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Product management</h1>
           <p className="text-slate-500 text-sm mt-1">Track catalog, pricing, and stock levels across your inventory.</p>
         </div>
-        <Link
-          to="/products/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-700 text-white rounded-lg text-sm font-semibold hover:bg-emerald-800 transition-colors shadow-sm hover:shadow-md hover:-translate-y-0.5 duration-300"
-        >
-          <Plus className="w-4 h-4" />
-          Add product
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/barcodes"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors shadow-sm hover:shadow"
+          >
+            <BarcodeIcon className="w-4 h-4 text-emerald-400 stroke-[2.5]" />
+            Print Barcode Stickers
+          </Link>
+          <Link
+            to="/products/new"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-700 text-white rounded-xl text-sm font-semibold hover:bg-emerald-800 transition-colors shadow-sm hover:shadow-md hover:-translate-y-0.5 duration-300"
+          >
+            <Plus className="w-4 h-4" />
+            Add product
+          </Link>
+        </div>
       </div>
 
       {/* Toolbar */}

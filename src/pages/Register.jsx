@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Phone, Loader2 } from 'lucide-react';
+import { Mail, Lock, User, Phone, Loader2, Key } from 'lucide-react';
 import { register as registerService } from '../services/authService';
 
 import toast from 'react-hot-toast';
@@ -13,7 +13,8 @@ const registerSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   mobileNumber: z.string().min(10, 'Mobile Number is required'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z.string()
+  confirmPassword: z.string(),
+  licenseKey: z.string().min(5, 'SaaS License Key is required to register')
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -148,6 +149,25 @@ const Register = () => {
             />
           </div>
           {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>}
+        </div>
+
+        <div className="pt-2 border-t border-slate-100">
+          <label className="block text-sm font-semibold text-slate-800 mb-1">SaaS License Key <span className="text-red-500">*</span></label>
+          <p className="text-xs text-slate-500 mb-2">Required for activation. Contact sales or support if you do not have an invitation key.</p>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Key className="h-5 w-5 text-blue-500" />
+            </div>
+            <input
+              {...register('licenseKey')}
+              type="text"
+              className={`block w-full pl-10 pr-3 py-2.5 border rounded-xl bg-blue-50/40 text-slate-900 placeholder-slate-400 font-mono text-sm uppercase focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
+                errors.licenseKey ? 'border-red-300 bg-red-50/20' : 'border-blue-200'
+              }`}
+              placeholder="TB-2026-XXXX-XXXX"
+            />
+          </div>
+          {errors.licenseKey && <p className="mt-1 text-sm text-red-500">{errors.licenseKey.message}</p>}
         </div>
 
         <button
