@@ -11,6 +11,8 @@ import toast from 'react-hot-toast';
 import { getProducts } from '../services/productService';
 import { createInvoice } from '../services/billingService';
 import ThermalReceipt from '../components/ThermalReceipt';
+import { saveOfflineInvoice } from '../utils/offlineSync';
+
 
 const PAYMENT_MODES = [
   { id: 'Cash', label: 'Cash', icon: Wallet },
@@ -104,8 +106,27 @@ const Billing = () => {
         }, 600);
       }
     },
-    onError: (err) => {
-      toast.error(err.response?.data?.message || 'Failed to generate invoice');
+    onError: (err, variables) => {
+      const isNetworkError = !err.response || err.message === 'Network Error';
+      if (isNetworkError) {
+        const mockInvoice = saveOfflineInvoice(variables);
+        setCreatedInvoice(mockInvoice);
+        setIsSuccess(true);
+        setCart([]);
+        setDiscount(0);
+        setNotes('');
+        setCustomerName('');
+        setCustomerMobile('');
+        toast.success('Connection lost: Bill saved locally and will auto-sync.');
+        if (shouldPrint) {
+          toast.success('Sending 4-inch bill to printer...');
+          setTimeout(() => {
+            window.print();
+          }, 600);
+        }
+      } else {
+        toast.error(err.response?.data?.message || 'Failed to generate invoice');
+      }
     }
   });
 
@@ -211,6 +232,25 @@ const Billing = () => {
         quantity: Number(item.quantity)
       }))
     };
+
+    if (!navigator.onLine) {
+      const mockInvoice = saveOfflineInvoice(payload);
+      setCreatedInvoice(mockInvoice);
+      setIsSuccess(true);
+      setCart([]);
+      setDiscount(0);
+      setNotes('');
+      setCustomerName('');
+      setCustomerMobile('');
+      toast.success('Offline mode: Bill saved locally and will auto-sync when online.');
+      if (printAfterSave) {
+        toast.success('Sending 4-inch bill to printer...');
+        setTimeout(() => {
+          window.print();
+        }, 600);
+      }
+      return;
+    }
 
     createMutation.mutate(payload);
   };
@@ -547,7 +587,7 @@ const Billing = () => {
 
           {/* Cart Table Card */}
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden flex flex-col min-h-[350px]">
-            <div className="overflow-x-auto flex-1">
+            <div className="hidden md:block overflow-x-auto flex-1">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-slate-50/90 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
@@ -652,6 +692,130 @@ const Billing = () => {
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Responsive Card View */}
+            <div className="block md:hidden flex-1 p-3.5 bg-slate-50/60">
+              {cart.length === 0 ? (
+                <div className="py-16 text-center text-slate-400">
+                  <div className="flex flex-col items-center justify-center max-w-sm mx-auto">
+                    <div className="w-16 h-16 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center mb-3 text-slate-300">
+                      <ShoppingCart className="w-8 h-8 stroke-[1.5]" />
+                    </div>
+                    <p className="font-bold text-slate-600 text-base">Your cart is empty</p>
+                    <p className="text-xs text-slate-400 mt-1 px-4">Scan barcode or search products above to add garments or fabric rolls to the invoice.</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3.5">
+                  {cart.map((item, idx) => {
+                    const itemRate = parseFloat(item.product.sellingPrice);
+                    const itemAmount = itemRate * item.quantity;
+                    return (
+                      <div
+                        key={item.product.id}
+                        className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-200 relative overflow-hidden flex flex-col gap-3.5"
+                      >
+                        {/* Header: Item Index + Name + Delete Action */}
+                        <div className="flex items-start justify-between gap-3 border-b border-slate-100 pb-3">
+                          <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                            <span className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 text-xs font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">
+                              {idx + 1}
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-extrabold text-slate-900 text-base leading-tight truncate">
+                                {item.product.productName}
+                              </h4>
+                              <div className="text-[11px] text-slate-500 font-mono mt-1 flex flex-wrap items-center gap-1.5">
+                                <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-semibold">
+                                  SKU: {item.product.productCode}
+                                </span>
+                                {item.product.barcode && (
+                                  <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-semibold">
+                                    BC: {item.product.barcode}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeFromCart(item.product.id)}
+                            className="w-8 h-8 rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-100 hover:text-rose-600 flex items-center justify-center transition-colors shrink-0 shadow-sm"
+                            title="Delete item"
+                          >
+                            <Trash2 className="w-4 h-4 stroke-[2.5]" />
+                          </button>
+                        </div>
+
+                        {/* Middle Row: Color, Size & Rate */}
+                        <div className="grid grid-cols-3 gap-2 py-2 px-3 bg-slate-50/80 rounded-xl border border-slate-100/80 text-center">
+                          <div>
+                            <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Color</span>
+                            <span className="text-xs font-bold text-slate-700 truncate block">
+                              {item.product.color || <span className="text-slate-300 font-normal">-</span>}
+                            </span>
+                          </div>
+                          <div className="border-x border-slate-200/60">
+                            <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Size</span>
+                            <span className="text-xs font-bold text-slate-700 truncate block">
+                              {item.product.size || <span className="text-slate-300 font-normal">-</span>}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Rate</span>
+                            <span className="text-xs font-mono font-extrabold text-slate-800 tabular-nums block">
+                              ₹{itemRate.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Footer Row: Quantity Adjuster & Total Amount */}
+                        <div className="flex items-center justify-between gap-3 pt-0.5">
+                          <div className="flex flex-col items-start">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                              Quantity ({item.product.unit || 'Pcs'})
+                            </span>
+                            <div className="inline-flex items-center border border-slate-200 rounded-xl bg-slate-50 p-1 shadow-sm">
+                              <button
+                                type="button"
+                                onClick={() => incrementQty(item.product.id, -1)}
+                                className="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-100 rounded-lg transition-colors shadow-sm"
+                                title="Decrease quantity"
+                              >
+                                <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
+                              </button>
+                              <input
+                                type="number"
+                                step="0.01"
+                                value={item.quantity}
+                                onChange={(e) => updateQuantity(item.product.id, e.target.value)}
+                                className="w-12 text-center text-xs font-mono font-extrabold text-slate-900 bg-transparent border-0 focus:outline-none focus:ring-0 p-0 tabular-nums"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => incrementQty(item.product.id, 1)}
+                                disabled={item.quantity >= Number(item.product.stockQuantity) && item.product.itemType !== 'Service'}
+                                className="w-7 h-7 flex items-center justify-center text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-100 rounded-lg transition-colors shadow-sm disabled:opacity-30 disabled:hover:bg-transparent"
+                                title="Increase quantity"
+                              >
+                                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="text-right flex flex-col items-end justify-center">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Total Amount</span>
+                            <span className="text-lg font-mono font-black text-blue-600 tabular-nums tracking-tight">
+                              ₹{itemAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Table Footer Actions */}
@@ -838,7 +1002,7 @@ const Billing = () => {
         </div>
 
         <div className="font-mono text-[11px] font-bold text-slate-400 hidden md:block">
-          TexBilling POS v2.5
+          Uno Tech POS v2.5
         </div>
       </div>
     </div>

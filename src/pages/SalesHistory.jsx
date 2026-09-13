@@ -160,42 +160,46 @@ const SalesHistory = () => {
         ) : (
           <div>
             <div className={`${viewMode === 'table' ? 'hidden md:block' : 'hidden'} overflow-x-auto`}>
-              <table className="w-full text-left text-sm text-slate-600">
-                <thead className="bg-slate-50 text-slate-500 font-medium">
+              <table className="w-full text-left text-sm text-slate-600 border-collapse">
+                <thead className="bg-slate-50/50 text-slate-700 uppercase tracking-wider text-xs font-extrabold border-b border-slate-200/60">
                   <tr>
-                    <th className="px-6 py-4">Invoice No</th>
-                    <th className="px-6 py-4">Date</th>
-                    <th className="px-6 py-4">Customer</th>
-                    <th className="px-6 py-4">Products</th>
-                    <th className="px-6 py-4 text-right">Grand Total</th>
-                    <th className="px-6 py-4 text-right">Actions</th>
+                    <th className="px-6 py-4 font-semibold">Invoice No</th>
+                    <th className="px-6 py-4 font-semibold">Date</th>
+                    <th className="px-6 py-4 font-semibold">Customer</th>
+                    <th className="px-6 py-4 font-semibold">Products</th>
+                    <th className="px-6 py-4 text-right font-semibold">Grand Total</th>
+                    <th className="px-6 py-4 text-right font-semibold">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100/80">
                   {invoices.map((invoice) => (
-                    <tr key={invoice.id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-slate-900">{invoice.invoiceNumber}</td>
-                      <td className="px-6 py-4">{new Date(invoice.invoiceDate).toLocaleDateString()}</td>
-                      <td className="px-6 py-4 capitalize">{invoice.customerName}</td>
+                    <tr key={invoice.id} className="group hover:bg-blue-50/30 transition-all duration-300">
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100/80 text-slate-700 border border-slate-200/60 group-hover:bg-white group-hover:border-blue-200 group-hover:text-blue-700 transition-colors">
+                          {invoice.invoiceNumber}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-slate-500 font-medium">{new Date(invoice.invoiceDate).toLocaleDateString()}</td>
+                      <td className="px-6 py-4 font-bold text-slate-800 capitalize">{invoice.customerName}</td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <span className="text-slate-700 truncate max-w-[200px]" title={getProductNames(invoice.items)}>
+                          <span className="text-slate-600 font-medium truncate max-w-[200px]" title={getProductNames(invoice.items)}>
                             {getProductNames(invoice.items)}
                           </span>
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 shrink-0">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-50 text-indigo-600 border border-indigo-100 shrink-0">
                             x{invoice.totalQuantity}
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-right font-bold text-slate-900">
+                      <td className="px-6 py-4 text-right font-black text-slate-900">
                         ₹{parseFloat(invoice.grandTotal).toLocaleString()}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleViewInvoice(invoice)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors text-xs font-semibold"
+                          className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-blue-600 hover:text-white hover:border-blue-600 shadow-sm hover:shadow-md transition-all duration-200 text-xs font-bold md:opacity-70 group-hover:opacity-100"
                         >
-                          <Eye className="w-3.5 h-3.5" />
+                          <Eye className="w-4 h-4" />
                           View
                         </button>
                       </td>

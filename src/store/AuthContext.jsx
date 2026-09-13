@@ -14,9 +14,21 @@ export const AuthProvider = ({ children }) => {
         try {
           const res = await getProfile();
           setUser(res.data.user);
+          localStorage.setItem('user', JSON.stringify(res.data.user));
         } catch (error) {
           console.error('Failed to fetch profile', error);
-          localStorage.removeItem('token');
+          const isNetworkError = !error.response || error.message === 'Network Error';
+          if (isNetworkError) {
+            // Restore from cache if offline
+            const cachedUser = localStorage.getItem('user');
+            if (cachedUser) {
+              setUser(JSON.parse(cachedUser));
+            }
+          } else {
+            // Authentic auth error (e.g. expired session) - clear token and cache
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+          }
         }
       }
       setLoading(false);
@@ -26,11 +38,13 @@ export const AuthProvider = ({ children }) => {
 
   const loginUser = (userData, token) => {
     localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
   };
 
   const logoutUser = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
   };
 

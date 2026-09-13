@@ -31,7 +31,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             <div className="p-2 bg-blue-50 rounded-lg">
               <Package className="w-6 h-6" />
             </div>
-            <span className="text-xl font-bold text-slate-900 tracking-tight">BillingPro</span>
+            <span className="text-xl font-bold text-slate-900 tracking-tight">Uno Tech</span>
           </div>
         </div>
 

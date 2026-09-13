@@ -14,7 +14,7 @@ const LandingPage = () => {
            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/20">
              <Receipt className="w-5 h-5 text-white" />
            </div>
-           <span className="font-extrabold text-lg tracking-tight text-slate-900">BillingApp</span>
+           <span className="font-extrabold text-lg tracking-tight text-slate-900">Uno Tech</span>
         </div>
         <div className="flex items-center gap-4">
           {user ? (
@@ -98,7 +98,7 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer className="w-full bg-white border-t border-slate-200 py-6 px-6 flex items-center justify-center">
-         <p className="text-xs font-medium text-slate-500">&copy; {new Date().getFullYear()} BillingPro SaaS Platform. All rights reserved.</p>
+         <p className="text-xs font-medium text-slate-500">&copy; {new Date().getFullYear()} Uno Tech SaaS Platform. All rights reserved.</p>
       </footer>
     </div>
   );

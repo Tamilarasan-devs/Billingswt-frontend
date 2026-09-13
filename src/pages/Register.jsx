@@ -49,9 +49,9 @@ const Register = () => {
 
   return (
     <div>
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-slate-900">Create an account</h2>
-        <p className="text-slate-500 text-sm mt-1">Start managing your billing efficiently</p>
+      <div className="mb-8">
+        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Create an account.</h2>
+        <p className="text-slate-500 text-sm mt-2 font-medium">Start managing your billing efficiently with Uno Tech.</p>
       </div>
 
       {error && (
@@ -70,8 +70,10 @@ const Register = () => {
             <input
               {...register('fullName')}
               type="text"
-              className={`block w-full pl-10 pr-3 py-2.5 border rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                errors.fullName ? 'border-red-300' : 'border-slate-200'
+              className={`block w-full pl-11 pr-4 py-3 border rounded-xl text-sm font-medium transition-all duration-200 ${
+                errors.fullName 
+                  ? 'border-red-300 bg-red-50 text-red-900 placeholder-red-300 focus:ring-red-500/20 focus:border-red-500' 
+                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 hover:border-slate-300 shadow-sm'
               }`}
               placeholder="John Doe"
             />
@@ -88,8 +90,10 @@ const Register = () => {
             <input
               {...register('email')}
               type="email"
-              className={`block w-full pl-10 pr-3 py-2.5 border rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                errors.email ? 'border-red-300' : 'border-slate-200'
+              className={`block w-full pl-11 pr-4 py-3 border rounded-xl text-sm font-medium transition-all duration-200 ${
+                errors.email 
+                  ? 'border-red-300 bg-red-50 text-red-900 placeholder-red-300 focus:ring-red-500/20 focus:border-red-500' 
+                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 hover:border-slate-300 shadow-sm'
               }`}
               placeholder="you@example.com"
             />
@@ -106,8 +110,10 @@ const Register = () => {
             <input
               {...register('mobileNumber')}
               type="text"
-              className={`block w-full pl-10 pr-3 py-2.5 border rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                errors.mobileNumber ? 'border-red-300' : 'border-slate-200'
+              className={`block w-full pl-11 pr-4 py-3 border rounded-xl text-sm font-medium transition-all duration-200 ${
+                errors.mobileNumber 
+                  ? 'border-red-300 bg-red-50 text-red-900 placeholder-red-300 focus:ring-red-500/20 focus:border-red-500' 
+                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 hover:border-slate-300 shadow-sm'
               }`}
               placeholder="+1 234 567 8900"
             />
@@ -124,8 +130,10 @@ const Register = () => {
             <input
               {...register('password')}
               type="password"
-              className={`block w-full pl-10 pr-3 py-2.5 border rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                errors.password ? 'border-red-300' : 'border-slate-200'
+              className={`block w-full pl-11 pr-4 py-3 border rounded-xl text-sm font-medium transition-all duration-200 ${
+                errors.password 
+                  ? 'border-red-300 bg-red-50 text-red-900 placeholder-red-300 focus:ring-red-500/20 focus:border-red-500' 
+                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 hover:border-slate-300 shadow-sm'
               }`}
               placeholder="••••••••"
             />
@@ -142,8 +150,10 @@ const Register = () => {
             <input
               {...register('confirmPassword')}
               type="password"
-              className={`block w-full pl-10 pr-3 py-2.5 border rounded-xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                errors.confirmPassword ? 'border-red-300' : 'border-slate-200'
+              className={`block w-full pl-11 pr-4 py-3 border rounded-xl text-sm font-medium transition-all duration-200 ${
+                errors.confirmPassword 
+                  ? 'border-red-300 bg-red-50 text-red-900 placeholder-red-300 focus:ring-red-500/20 focus:border-red-500' 
+                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 hover:border-slate-300 shadow-sm'
               }`}
               placeholder="••••••••"
             />
@@ -161,8 +171,10 @@ const Register = () => {
             <input
               {...register('licenseKey')}
               type="text"
-              className={`block w-full pl-10 pr-3 py-2.5 border rounded-xl bg-blue-50/40 text-slate-900 placeholder-slate-400 font-mono text-sm uppercase focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors ${
-                errors.licenseKey ? 'border-red-300 bg-red-50/20' : 'border-blue-200'
+              className={`block w-full pl-11 pr-4 py-3 border rounded-xl font-mono text-sm uppercase transition-all duration-200 ${
+                errors.licenseKey 
+                  ? 'border-red-300 bg-red-50/50 text-red-900 placeholder-red-300 focus:ring-red-500/20 focus:border-red-500' 
+                  : 'bg-blue-50/30 border-blue-200 text-slate-900 placeholder-slate-400 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 hover:border-blue-300 shadow-sm'
               }`}
               placeholder="TB-2026-XXXX-XXXX"
             />
@@ -173,7 +185,7 @@ const Register = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full flex items-center justify-center py-2.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mt-6"
+          className="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all duration-200 hover:-translate-y-[1px] hover:shadow-lg mt-8"
         >
           {isSubmitting ? (
             <Loader2 className="animate-spin h-5 w-5" />

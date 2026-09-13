@@ -40,7 +40,7 @@ const SplashScreen = () => {
 
         {/* Title & Subtitle */}
         <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-1">
-          Billing Software
+          Uno Tech
         </h1>
         <p className="text-slate-500 font-medium mb-10 text-sm tracking-wide">
           Enterprise Management System
